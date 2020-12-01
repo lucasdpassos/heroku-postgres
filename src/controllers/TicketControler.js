@@ -1,6 +1,7 @@
 const TicketService = require('../services/TicketService')
 const db = require('../db') 
-
+const { json } = require('body-parser')
+const Ticket = require('../models/ticket')
 
 
 
@@ -32,8 +33,8 @@ module.exports = {
                 results = doc.data()                
                  
              }) 
-                               
-                 
+                            
+              
                 
              
          })
@@ -41,8 +42,16 @@ module.exports = {
          
         
      },
-    new: (req, res) => {
+    new: async (req, res) => {
 
+        
+        const data = req.body 
+            const ticket = await db.collection('notes').doc().set(data)
+        res.send("dados escritos com sucesso")
+
+        
+            
+        
     },
     edit: (req, res) => {
 

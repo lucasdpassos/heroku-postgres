@@ -22,9 +22,25 @@ module.exports = {
         
        
     },
-    one: (req, res) => {
+    one: async (req, res) => {
 
-    },
+        let id = req.params.id
+
+        let results = ''
+        await db.collection("notes").where('id', '==', id).get().then((querySnapshot) => { 
+             querySnapshot.forEach(doc => {
+                results = doc.data()                
+                 
+             }) 
+                               
+                 
+                
+             
+         })
+         res.send(results)
+         
+        
+     },
     new: (req, res) => {
 
     },

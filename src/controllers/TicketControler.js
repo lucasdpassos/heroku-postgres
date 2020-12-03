@@ -1,5 +1,5 @@
 const TicketService = require('../services/TicketService')
-const db = require('../db') 
+const pool = require('../db') 
 const { json } = require('body-parser')
 const Ticket = require('../models/ticket')
 
@@ -11,45 +11,25 @@ module.exports = {
     },
     all: async (req, res) => {
         
-        let results = []
-       await db.collection("notes").get().then((querySnapshot) => { 
-            querySnapshot.forEach(function(doc) {
-                results.push(doc.data())                
-                
-               
-            });
-        })
-        res.send(results)
-        
+      
        
     },
     one: async (req, res) => {
 
-        let id = req.params.id
+        process.env["NODE_TLS_REJECT_UNAUTHORIZED"] = 0;      
+        const getUser = await pool.query("SELECT * FROM users")
 
-        let results = ''
-        await db.collection("notes").where('id', '==', id).get().then((querySnapshot) => { 
-             querySnapshot.forEach(doc => {
-                results = doc.data()                
-                 
-             }) 
-                            
-              
-                
-             
-         })
-         res.send(results)
-         
-        
+        res.json(getUser)
+
      },
     new: async (req, res) => {
 
-        
-        const data = req.body 
-            const ticket = await db.collection('notes').doc().set(data)
-        res.send("dados escritos com sucesso")
+            process.env["NODE_TLS_REJECT_UNAUTHORIZED"] = 0;       
+            const { user } = req.body
+            const newUser = await pool.query("INSERT INTO users (email) VALUES($1)", [user])
 
-        
+            res.json(newUser)
+      
             
         
     },
